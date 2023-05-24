@@ -1,13 +1,23 @@
+
 import database_config
-from income_service import IncomeService
+from repository import Repository
 from controller import Controller
+from model import Model
 from view import View
+import sys
+from PyQt5.QtWidgets import QApplication
 
 
 database_config.database_config()
 
-income_service = IncomeService()
+repository = Repository()
+model = Model(repository)
+
+app = QApplication(sys.argv)
 view = View()
 
-controller = Controller(view, income_service)
-controller.start()
+controller = Controller(view, model)
+
+
+view.show()
+sys.exit(app.exec_())
