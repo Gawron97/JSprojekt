@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from sqlalchemy import Column, Integer, String, DateTime, Double, Enum
-from category import Category
-from database import Base
-from type import Type
+from database.database import Base
+from tables.category import Category
+from tables.type import Type
 
 
 class Transaction(Base):
@@ -12,6 +14,13 @@ class Transaction(Base):
     date = Column(DateTime)
     category = Column(Enum(Category))
     type = Column(Enum(Type))
+
+    def __init__(self, name, price, date, category, type):
+        self.name = name
+        self.price = price
+        self.date = date
+        self.category = category
+        self.type = type
 
     def to_string(self):
         return f'{self.id_income} {self.name} {self.price} {self.date} {self.category}'

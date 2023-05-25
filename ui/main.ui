@@ -94,6 +94,13 @@
         <item>
          <widget class="QListWidget" name="budgetList"/>
         </item>
+        <item>
+         <widget class="QPushButton" name="addTransactionButton">
+          <property name="text">
+           <string>add transaction</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -106,9 +113,9 @@
              <widget class="QLineEdit" name="lineEdit"/>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="setLimitButton">
               <property name="text">
-               <string>PushButton</string>
+               <string>set limit</string>
               </property>
              </widget>
             </item>

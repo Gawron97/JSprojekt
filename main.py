@@ -1,9 +1,8 @@
-
-import database_config
-from repository import Repository
+from database import database_config
+from database.repository import Repository
 from controller import Controller
 from model import Model
-from view import View
+from view.view import View
 import sys
 from PyQt5.QtWidgets import QApplication
 

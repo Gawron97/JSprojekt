@@ -1,18 +1,14 @@
-from datetime import datetime
+from sqlalchemy import extract, func, and_
 
-from sqlalchemy import extract, func, and_, select
-
-from category import Category
-from database import session
-from entities import Transaction, Limit
-from type import Type
+from database.database import session
+from tables.entities import Transaction, Limit
+from tables.type import Type
 
 
 class Repository:
 
-    def add_transaction(self):
-        outcome = Transaction(name='testowy outcome', price=20.0, date=datetime.now(), category=Category.FOOD, type=Type.OUTCOME)
-        session.add(outcome)
+    def add_transaction(self, transaction):
+        session.add(transaction)
         session.commit()
 
     def add_limit(self):
