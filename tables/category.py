@@ -2,9 +2,9 @@ from enum import Enum
 
 
 class Category(Enum):
-    FOOD = 'Food'
-    ENTERTAINMENT = 'Entertainment'
-    INVESTMENT = 'Investment'
-    HOUSEHOLD = 'Household'
-    TRANSPORTATION = 'Transportation'
-    OTHER = 'Other'
+    FOOD = 'FOOD'
+    ENTERTAINMENT = 'ENTERTAINMENT'
+    INVESTMENT = 'INVESTMENT'
+    HOUSEHOLD = 'HOUSEHOLD'
+    TRANSPORTATION = 'TRANSPORTATION'
+    OTHER = 'OTHER'

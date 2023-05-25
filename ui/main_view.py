@@ -60,7 +60,7 @@ class Ui_MainView(object):
         self.budgetList = QtWidgets.QListWidget(self.verticalLayoutWidget)
         delegate = TransactionDelegate()
         self.budgetList.setItemDelegate(delegate)
-        self.budgetList.setSpacing(10)
+        self.budgetList.setSpacing(12)
         self.budgetList.setObjectName("budgetList")
         self.budgetLayout.addWidget(self.budgetList)
         self.addTransactionButton = QtWidgets.QPushButton(self.verticalLayoutWidget)

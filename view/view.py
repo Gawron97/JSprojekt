@@ -1,5 +1,6 @@
 from PyQt5.QtChart import QPieSeries, QPieSlice
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QListWidgetItem
 
 from ui.main_view import Ui_MainView
@@ -27,8 +28,11 @@ class View(QMainWindow):
 
     def edit_chart(self, expenses_by_category: dict):
         series = QPieSeries()
+        i=0
         for category, expense in expenses_by_category.items():
             series.append(category, expense)
+            series.slices()[i].setLabelColor(QColor("#800000"))
+            i += 1
 
         series.setLabelsVisible(True)
         series.setLabelsPosition(QPieSlice.LabelInsideNormal)

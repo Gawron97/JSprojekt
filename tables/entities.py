@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Double, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Double, Enum, Date
 from database.database import Base
 from tables.category import Category
 from tables.type import Type
@@ -11,7 +11,7 @@ class Transaction(Base):
     id_income = Column(Integer, primary_key=True)
     name = Column(String)
     price = Column(Double(precision=2))
-    date = Column(DateTime)
+    date = Column(Date)
     category = Column(Enum(Category))
     type = Column(Enum(Type))
 

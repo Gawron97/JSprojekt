@@ -1,4 +1,5 @@
 import datetime
+from typing import List
 
 from tables.category import Category
 from tables.entities import Transaction
@@ -24,7 +25,9 @@ class Model:
         return limit.amount if limit else 0
 
     def get_outcomes_in_month(self, date):
-        return self.repository.get_outcomes_in_month(date)
+        data: List[Transaction] = self.repository.get_outcomes_in_month(date)
+        data.sort(key=lambda data: data.date)
+        return data
 
     def get_incomes_in_month(self, date):
         return self.repository.get_incomes_in_month(date)

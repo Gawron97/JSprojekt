@@ -4,6 +4,8 @@ from dateutil.relativedelta import relativedelta
 
 import exceptions.exceptions as ex
 from model import Model
+from tables.category import Category
+from tables.type import Type
 from view.add_transaction_view import AddTransactionView
 from view.view import View
 
@@ -66,18 +68,29 @@ class Controller:
 
     def add_transaction(self):
         self.add_transaction_view = AddTransactionView()
+        self.add_transaction_view.init_category_combo_box([Category.FOOD.name, Category.TRANSPORTATION.name,
+                                                           Category.HOUSEHOLD.name, Category.ENTERTAINMENT.name,
+                                                           Category.INVESTMENT.name, Category.OTHER.name])
+        self.add_transaction_view.init_type_combo_box([Type.OUTCOME.name, Type.INCOME.name])
         self.add_transaction_view.ui.submitButton.clicked.connect(self.submit_transaction)
         self.add_transaction_view.exec_()
 
     def submit_transaction(self):
         try:
             self.model.add_transaction(self.add_transaction_view.ui.nameLineEdit.text(),
-                self.add_transaction_view.ui.priceLineEdit.text(), self.add_transaction_view.ui.dateLineEdit.text(),
-                self.add_transaction_view.ui.categoryLineEdit.text(), self.add_transaction_view.ui.typeLineEdit.text())
+                                       self.add_transaction_view.ui.priceLineEdit.text(),
+                                       self.add_transaction_view.ui.dateLineEdit.text(),
+                                       self.add_transaction_view.ui.categoryComboBox.currentText(),
+                                       self.add_transaction_view.ui.typeComboBox.currentText())
 
-            self.load_outcomes()
-            self.update_chart_layout()
+            if self.add_transaction_view.ui.typeComboBox.currentText() == Type.OUTCOME.name:
+                self.load_outcomes()
+                self.update_chart_layout()
+            else:
+                self.load_incomes()
+
             self.add_transaction_view.close()
+
         except ex.IncorrectTypeError as e:
             self.add_transaction_view.show_incorrect_data_msg(e.message)
         except ex.IncorrectCategoryException as e:
