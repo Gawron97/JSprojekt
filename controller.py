@@ -7,6 +7,7 @@ from model import Model
 from tables.category import Category
 from tables.type import Type
 from view.add_transaction_view import AddTransactionView
+from view.stats_view import StatsView
 from view.view import View
 
 
@@ -23,6 +24,7 @@ class Controller:
         self.load_outcomes()
         self.update_progress_bar()
         self.update_chart()
+        self.view.set_actual_year(self.date)
 
 
     def on_buttons_click(self):
@@ -32,6 +34,7 @@ class Controller:
         self.view.ui.addTransactionButton.clicked.connect(self.add_transaction)
         self.view.ui.prevMonthButton.clicked.connect(self.previous_month)
         self.view.ui.nextMonthButton.clicked.connect(self.next_month)
+        self.view.ui.detailStatsButton.clicked.connect(self.details_statistics)
 
 
     def update_progress_bar(self):
@@ -104,9 +107,20 @@ class Controller:
         self.date = self.date - relativedelta(months=1)
         self.load_outcomes()
         self.update_chart_layout()
+        self.view.set_actual_year(self.date)
 
     def next_month(self):
         self.date = self.date + relativedelta(months=1)
         self.load_outcomes()
         self.update_chart_layout()
+        self.view.set_actual_year(self.date)
+
+    def details_statistics(self):
+        self.details_statistics_view = StatsView()
+        expanses_in_each_month = self.model.get_expanses_in_each_month(self.date)
+        incomes_in_each_month = self.model.get_incomes_in_each_month(self.date)
+        difference_between_expanses_and_limit = self.model.get_difference_in_limit_and_expanses(self.date)
+        self.details_statistics_view.update_data(expanses_in_each_month, incomes_in_each_month,
+                                                 difference_between_expanses_and_limit)
+        self.details_statistics_view.exec_()
 

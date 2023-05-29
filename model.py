@@ -95,5 +95,31 @@ class Model:
 
         transaction = Transaction(name, price_int, formated_date, formated_category, formated_type)
         self.repository.add_transaction(transaction)
-        
+
+    def get_expanses_in_each_month(self, date):
+        return self.prepare_data(self.repository.get_sum_price_outcomes_for_each_month(date))
+
+    def get_incomes_in_each_month(self, date):
+        return self.prepare_data(self.repository.get_sum_of_incomes_for_each_month(date))
+
+    def get_difference_in_limit_and_expanses(self, date):
+        limit_in_each_month = self.prepare_data(self.repository.get_limit_in_each_month(date))
+        expanses_in_each_month = self.prepare_data(self.repository.get_sum_price_outcomes_for_each_month(date))
+
+        print(limit_in_each_month)
+        print(expanses_in_each_month)
+
+        result = []
+        for i in range(0, 12, 1):
+            result.append((i+1, max(limit_in_each_month[i][1] - expanses_in_each_month[i][1], 0)))
+
+        return result
+
+
+    def prepare_data(self, data):
+        result = [(1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 0), (11, 0), (12, 0)]
+        for row in data:
+            result[int(row[0]) - 1] = (int(row[0]), row[1])
+
+        return result
 

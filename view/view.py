@@ -39,6 +39,8 @@ class View(QMainWindow):
         self.ui.chart.removeAllSeries()
         self.ui.chart.addSeries(series)
 
+    def set_actual_year(self, date):
+        self.ui.actualDateLabel.setText(f'{date.month}-{date.year}')
 
     def show_limit_error_msg(self, message):
         error_msg = QMessageBox()

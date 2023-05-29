@@ -72,3 +72,33 @@ class Repository:
         ).scalar()
 
         return res if res else 0
+
+    def get_sum_price_outcomes_for_each_month(self, date):
+        return session.query(
+            extract('month', Transaction.date).label('month'),
+            func.coalesce(func.sum(Transaction.price), 0).label('total_expenses')
+        ).filter(
+            extract('year', Transaction.date) == date.year,
+            Transaction.type == Type.OUTCOME
+        ).group_by(
+            extract('month', Transaction.date)
+        ).all()
+
+    def get_sum_of_incomes_for_each_month(self, date):
+        return session.query(
+            extract('month', Transaction.date).label('month'),
+            func.coalesce(func.sum(Transaction.price), 0).label('total_expenses')
+        ).filter(
+            extract('year', Transaction.date) == date.year,
+            Transaction.type == Type.INCOME
+        ).group_by(
+            extract('month', Transaction.date)
+        ).all()
+
+    def get_limit_in_each_month(self, date):
+        return session.query(
+            Limit.month.label('month'),
+            Limit.amount.label('amount')
+        ).filter(
+            Limit.year == date.year
+        ).all()
