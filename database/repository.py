@@ -43,9 +43,15 @@ class Repository:
         ).all()
 
     def get_spent_amount_in_month(self, date):
+        return self.get_amount_in_month(date, Type.OUTCOME)
+
+    def get_earned_amount_in_month(self, date):
+        return self.get_amount_in_month(date, Type.INCOME)
+
+    def get_amount_in_month(self, date, transaction_type):
         res = session.query(func.sum(Transaction.price)).filter(
             and_(
-                Transaction.type == Type.OUTCOME,
+                Transaction.type == transaction_type,
                 extract('month', Transaction.date) == date.month,
                 extract('year', Transaction.date) == date.year
             )

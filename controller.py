@@ -24,6 +24,7 @@ class Controller:
         self.load_outcomes()
         self.update_progress_bar()
         self.update_chart()
+        self.update_limit_label()
         self.view.set_actual_year(self.date)
 
 
@@ -50,14 +51,23 @@ class Controller:
     def load_outcomes(self):
         data = self.model.get_outcomes_in_month(self.date)
         self.show_data_in_list(data)
+        amount_spent_in_month = self.model.get_spent_amount_in_month(self.date)
+        self.view.update_amount_of_money_label("amount spent: ", amount_spent_in_month)
 
     def load_incomes(self):
         data = self.model.get_incomes_in_month(self.date)
         self.show_data_in_list(data)
+        earned_amount_in_month = self.model.get_earned_amount_in_month(self.date)
+        self.view.update_amount_of_money_label("amount earned: ", earned_amount_in_month)
 
     def update_chart_layout(self):
         self.update_progress_bar()
         self.update_chart()
+        self.update_limit_label()
+
+    def update_limit_label(self):
+        limit_amount = self.model.get_limit_in_month(self.date)
+        self.view.update_limit_label(limit_amount)
 
     def set_limit(self):
         limit = self.view.ui.limitLineEdit.text()
@@ -67,6 +77,7 @@ class Controller:
             self.view.show_limit_error_msg(e.message)
 
         self.update_chart_layout()
+        self.update_limit_label()
         self.view.ui.limitLineEdit.setText('')
 
     def add_transaction(self):

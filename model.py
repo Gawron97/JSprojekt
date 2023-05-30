@@ -35,6 +35,9 @@ class Model:
     def get_spent_amount_in_month(self, date):
         return self.repository.get_spent_amount_in_month(date)
 
+    def get_earned_amount_in_month(self, date):
+        return self.repository.get_earned_amount_in_month(date)
+
     def update_limit_for_month(self, limit, date):
 
         try:
@@ -105,9 +108,6 @@ class Model:
     def get_difference_in_limit_and_expanses(self, date):
         limit_in_each_month = self.prepare_data(self.repository.get_limit_in_each_month(date))
         expanses_in_each_month = self.prepare_data(self.repository.get_sum_price_outcomes_for_each_month(date))
-
-        print(limit_in_each_month)
-        print(expanses_in_each_month)
 
         result = []
         for i in range(0, 12, 1):

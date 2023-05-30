@@ -40,7 +40,7 @@ class View(QMainWindow):
         self.ui.chart.addSeries(series)
 
     def set_actual_year(self, date):
-        self.ui.actualDateLabel.setText(f'{date.month}-{date.year}')
+        self.ui.dateLabel.setText(f'actual date: {date.month}-{date.year}')
 
     def show_limit_error_msg(self, message):
         error_msg = QMessageBox()
@@ -49,3 +49,9 @@ class View(QMainWindow):
         error_msg.setText(message)
         error_msg.setStandardButtons(QMessageBox.Ok)
         error_msg.exec()
+
+    def update_amount_of_money_label(self, text, spent_amount):
+        self.ui.amount_of_money.setText(f'{text}{spent_amount}')
+
+    def update_limit_label(self, limit_amount):
+        self.ui.monthLimitLabel.setText(f'Limit in this month: {limit_amount}')
