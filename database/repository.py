@@ -11,11 +11,6 @@ class Repository:
         session.add(transaction)
         session.commit()
 
-    def add_limit(self):
-        limit = Limit(year=2023, month=5, amount=200)
-        session.add(limit)
-        session.commit()
-
     def get_limit_in_month(self, date):
         return session.query(Limit).filter(
             and_(

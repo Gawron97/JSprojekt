@@ -1,5 +1,6 @@
 from PyQt5.QtChart import QChart, QBarSeries, QBarCategoryAxis, QLineSeries, QChartView, QBarSet, QValueAxis
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QDialog
 
 from ui.stats_view import Ui_StatsPanel
@@ -38,22 +39,28 @@ class StatsView(QDialog):
         axis_y.setRange(0, axis_y_max_value)
         axis_y.applyNiceNumbers()
 
+        self.ui.chart.legend().markers(line_series)[0].setLabel("Saved money compared to limit")
+
         self.ui.chart.setAxisX(axis_x, bar_series)
         self.ui.chart.setAxisY(axis_y, line_series)
 
 
     def get_bar_series(self, expanses_in_each_month, incomes_in_each_monthoooo):
-        serie = QBarSet('outcomes')
+        outcome_serie = QBarSet('outcomes')
         for row in expanses_in_each_month:
-            serie.append(row[1])
+            outcome_serie.append(row[1])
 
-        serie2 = QBarSet('incomes')
+        outcome_serie.setColor(QColor("#FF0000"))
+
+        income_serie = QBarSet('incomes')
         for row in incomes_in_each_monthoooo:
-            serie2.append(row[1])
+            income_serie.append(row[1])
+
+        income_serie.setColor(QColor("#008000"))
 
         series = QBarSeries()
-        series.append(serie)
-        series.append(serie2)
+        series.append(outcome_serie)
+        series.append(income_serie)
 
         return series
 
@@ -61,6 +68,10 @@ class StatsView(QDialog):
         line_series = QLineSeries()
         for row in difference_between_expanses_and_limit:
             line_series.append(row[0], row[1])
+
+        line_series.setPointLabelsVisible()
+        line_series.setPointLabelsFormat("@yPoint")
+        line_series.setColor(QColor("#0000FF"))
 
         return line_series
 

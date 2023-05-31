@@ -20,7 +20,6 @@ class TransactionDelegate(QStyledItemDelegate):
 
             painter.drawLine(text_rect.left(), text_rect.bottom() + 3, text_rect.right(), text_rect.bottom() + 3)
 
-
         else:
             super().paint(painter, option, index)
 

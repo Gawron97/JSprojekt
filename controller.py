@@ -37,7 +37,6 @@ class Controller:
         self.view.ui.nextMonthButton.clicked.connect(self.next_month)
         self.view.ui.detailStatsButton.clicked.connect(self.details_statistics)
 
-
     def update_progress_bar(self):
         self.view.edit_progress_bar(self.model.get_spent_amount_in_month(self.date), self.model.get_limit_in_month(self.date))
 
@@ -95,7 +94,8 @@ class Controller:
                                        self.add_transaction_view.ui.priceLineEdit.text(),
                                        self.add_transaction_view.ui.dateLineEdit.text(),
                                        self.add_transaction_view.ui.categoryComboBox.currentText(),
-                                       self.add_transaction_view.ui.typeComboBox.currentText())
+                                       self.add_transaction_view.ui.typeComboBox.currentText(),
+                                       self.date)
 
             if self.add_transaction_view.ui.typeComboBox.currentText() == Type.OUTCOME.name:
                 self.load_outcomes()
@@ -105,13 +105,7 @@ class Controller:
 
             self.add_transaction_view.close()
 
-        except ex.IncorrectTypeError as e:
-            self.add_transaction_view.show_incorrect_data_msg(e.message)
-        except ex.IncorrectCategoryException as e:
-            self.add_transaction_view.show_incorrect_data_msg(e.message)
-        except ex.WrongPriceException as e:
-            self.add_transaction_view.show_incorrect_data_msg(e.message)
-        except ex.WrongDateError as e:
+        except Exception as e:
             self.add_transaction_view.show_incorrect_data_msg(e.message)
 
     def previous_month(self):

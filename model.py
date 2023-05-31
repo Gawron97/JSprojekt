@@ -13,13 +13,6 @@ class Model:
     def __init__(self, repository: Repository):
         self.repository: Repository = repository
 
-
-    # def add_transaction(self):
-    #     self.repository.add_transaction()
-
-    def add_limit(self):
-        self.repository.add_limit()
-
     def get_limit_in_month(self, date):
         limit = self.repository.get_limit_in_month(date)
         return limit.amount if limit else 0
@@ -30,7 +23,9 @@ class Model:
         return data
 
     def get_incomes_in_month(self, date):
-        return self.repository.get_incomes_in_month(date)
+        data = self.repository.get_incomes_in_month(date)
+        data.sort(key=lambda data: data.date)
+        return data
 
     def get_spent_amount_in_month(self, date):
         return self.repository.get_spent_amount_in_month(date)
@@ -40,14 +35,7 @@ class Model:
 
     def update_limit_for_month(self, limit, date):
 
-        try:
-            limit_int = int(limit)
-        except Exception:
-            raise ex.WrongLimitException("Provided limit is not correct")
-
-        if limit_int <= 0 or limit_int <= self.get_spent_amount_in_month(date):
-            raise ex.WrongLimitException('Provided limit should be higher then already spend amount in this month and'
-                                         ' higher than 0')
+        limit_int = self.valid_limit(limit, date)
 
         if self.repository.get_limit_in_month(date):
             self.repository.update_limit(limit_int, date)
@@ -70,7 +58,7 @@ class Model:
 
         return expenses_by_category
 
-    def add_transaction(self, name, price, date, category, type):
+    def add_transaction(self, name, price, date, category, type, current_date):
 
         try:
             price_int = int(price)
@@ -79,13 +67,7 @@ class Model:
         except Exception:
             raise ex.WrongPriceException('provided price is not correct')
 
-        try:
-            formated_date = datetime.datetime.strptime(date, "%d-%m-%Y")
-        except Exception:
-            raise ex.WrongDateError('Provided date is not correct, format should be d-M-Y')
-
-        if formated_date > datetime.datetime.now():
-            raise ex.WrongDateError('Provided date is not correct, date cannot be after today')
+        formated_date = self.valid_date(date, current_date)
 
         try:
             formated_category = Category(category)
@@ -122,4 +104,30 @@ class Model:
             result[int(row[0]) - 1] = (int(row[0]), row[1])
 
         return result
+
+    def valid_limit(self, limit, date):
+        try:
+            limit_int = int(limit)
+        except Exception:
+            raise ex.WrongLimitException("Provided limit is not correct")
+
+        if limit_int <= 0 or limit_int <= self.get_spent_amount_in_month(date):
+            raise ex.WrongLimitException('Provided limit should be higher then already spend amount in this month and'
+                                         ' higher than 0')
+
+        return limit_int
+
+    def valid_date(self, date, current_date):
+        try:
+            formated_date = datetime.datetime.strptime(date, "%d-%m-%Y")
+        except Exception:
+            raise ex.WrongDateError('Provided date is not correct, format should be d-M-Y')
+
+        if formated_date > datetime.datetime.now():
+            raise ex.WrongDateError('Provided date is not correct, date cannot be after today')
+
+        if formated_date.month > current_date.month:
+            raise ex.WrongDateError('Provided date is not correct, you trying to add transaction to another month')
+
+        return formated_date
 
